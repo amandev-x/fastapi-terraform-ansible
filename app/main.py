@@ -69,3 +69,39 @@ async def get_task_by_id(db: session = Depends(get_db), task_id: int = Path(...,
         )
     
     return task 
+
+# Task Update
+@app.put("/tasks/{task_id}", response_model=TaskResponse)
+async def update_task(task_id: int, task_update: TaskUpdate, db: session = Depends(get_db)):
+    task = db.query(Task).filter(Task.id == task_id).first()
+
+    if not task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Task with ID {task_id} not found"
+        )
+    
+    # Update fields
+    for key, value in task_update.model_dump(exclude_unset=True).items():
+        setattr(task, key, value)
+
+    db.commit()
+    db.refresh(task)
+
+    return task
+
+# Task Delete
+@app.delete("/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_task(task_id: int, db: session = Depends(get_db)):
+    task = db.query(Task).filter(Task.id == task_id).first()
+
+    if not task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Task with ID {task_id} not found"
+        )
+    
+    db.delete(task)
+    db.commit()
+
+    return {"message": "Task deleted successfully"}
