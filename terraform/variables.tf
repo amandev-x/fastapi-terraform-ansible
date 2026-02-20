@@ -26,3 +26,9 @@ variable "availability_zones" {
   description = "A list of AZs"
   default     = ["ap-south-1a", "ap-south-1b"]
 }
+
+variable "ssh_key" {
+  type        = string
+  description = "SSH key-pair"
+  default     = "fastapi-infra-key"
+}
