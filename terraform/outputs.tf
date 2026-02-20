@@ -17,6 +17,16 @@ output "private_subnet_ids" {
 }
 
 output "natgateway_id" {
-    value = module.networking.natgateway_id
-    description = "ID of the Nat-Gateway"
+  value       = module.networking.natgateway_id
+  description = "ID of the Nat-Gateway"
+}
+
+output "bastion_ip" {
+  value       = module.bastion.bastion_public_ip
+  description = "Public IP of Bastion Host"
+}
+
+output "bastion_id" {
+  value       = module.bastion.bastion_id
+  description = "ID of the Bastion Host"
 }
